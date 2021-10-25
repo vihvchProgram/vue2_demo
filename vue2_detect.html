@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>總結數據偵聽</title>
+    <script type="text/javascript" src="./js/vue2.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <h1>學生信息</h1>
+      <button @click="student.age++">學生年齡+1歲</button> <br />
+      <button @click="addSex">添加性別屬性, 默認值: 男</button> <br />
+      <button @click="addFriend">在列表首位添加一個朋友</button> <br />
+      <button @click="updateFirstFriendName">
+        修改第一個朋友的名字為: 張三
+      </button>
+      <br />
+      <button @click="addHobby">添加一個喜好</button> <br />
+      <button @click="updateHobby">修改第一個喜好為: 寫作</button> <br />
+      <button @click="remodeSwim">過濾掉 喜好中的 游泳</button>
+      <h3>姓名: {{student.name}}</h3>
+      <h3>年齡: {{student.age}}</h3>
+      <h3 v-if="student.sex">性別: {{student.sex}}</h3>
+      <h3>喜好:</h3>
+      <ul>
+        <li v-for="(h,index) of student.hobby" :key="index">{{h}}</li>
+      </ul>
+      <h3>朋友們:</h3>
+      <ul>
+        <li v-for="(f,index) of student.friends" :key="index">
+          {{f.name}}--{{f.age}}
+        </li>
+      </ul>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    Vue.config.productionTip = false;
+
+    const vm = new Vue({
+      el: "#root",
+      data: {
+        student: {
+          name: "Tom",
+          age: 18,
+          hobby: ["閱讀", "游泳", "彈吉他"],
+          friends: [
+            { name: "Jerry", age: 35 },
+            { name: "Tony", age: 36 },
+          ],
+        }
+      },
+      methods: {
+        addSex() {
+          // Vue.set(this.student, "sex", "男");
+          this.$set(this.student, "sex", "男");
+        },
+        addFriend() {
+          this.student.friends.unshift({ name: "Jack", age: 70 });
+        },
+        updateFirstFriendName() {
+          this.student.friends[0].name = "張三";
+        },
+        addHobby() {
+          this.student.hobby.push("上網");
+        },
+        updateHobby() {
+          // this.student.hobby.splice(0,1,'寫作')
+          // Vue.set(this.student.hobby,0,'寫作')
+          this.$set(this.student.hobby, 0, "寫作");
+        },
+        remodeSwim() {
+          this.student.hobby = this.student.hobby.filter((h) => {
+            return h !== "游泳";
+          });
+        }
+      }
+    })
+  </script>
+</html>
